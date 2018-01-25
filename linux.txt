@@ -2,3 +2,24 @@ touch filename 新建文件
 mkdir directory 新建目录
 rm filename 删除文件
 rm -rf 删除目录
+
+cp [option] source destination   复制文件或目录
+	option: -f 强制进行
+			-r 递归，用于复制目录
+			-s 生成快捷方式
+			-u 若目标文件比源文件旧，才更新目标文件
+
+cp ~/eclipse-workspace/python语言及其应用/Chapter2.txt  ./python\ 编程从入门到实践/Chapter2.txt
+
+
+mv [option] source destination 	移动文件或目录
+	option: -f 强制移动
+			-i 若目标文件存在，询问是否覆盖
+			-u 若目标文件比源文件旧，才进行移动
+
+
+sudo add-apt-repository ppa:<site> 添加源
+sudo apt-get update 更新源
+sudo apt-get upgrade 更新软件
+sudo apt-get install <name> 安装软件
+
