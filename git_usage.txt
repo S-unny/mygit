@@ -1,0 +1,29 @@
+创建仓库        git init
+添加           git add readme.txt
+提交           git commit -m"注释"
+git rm 删除文件
+git checkout -- filename 撤销修改
+git push -f origin master  强制推送
+设置邮箱 用户名  
+git config    --global user.email "you@example.com"
+git config    --global user.name "Your Name"
+查看工作区状态  git status
+查看变化       git diff filename
+显示提交日志    git log
+回退到上个版本   git reset --hard HEAD^
+回退到前n个版本  git reset --hard HEAD~n
+回退到版本号x    git reset --hard x
+显示历史命令     git reflog
+删除命令        git rm filename
+关联远程仓库   origin 远程库名  
+git remote add origin git@server-name:path/repo-name.git
+
+第一次推送master分支的所有内容  
+git push -u origin master
+之后推送  git push origin master 
+从远程库克隆一个库
+git clone git@github.com:michaelliao/gitskills.git            
+
+chrome  更新 flash
+sudo apt-get install pepperflashplugin-nonfree
+sudo update-pepperflashplugin-nonfree  --install
