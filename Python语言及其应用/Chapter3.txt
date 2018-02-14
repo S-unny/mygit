@@ -1,0 +1,415 @@
+列表
+	本质:序列结构，内容可变，，具有相同值的元素允许出现多次
+
+	创建列表
+			>>> empty_list=[]
+			>>>weekdays=['Monday','Tuseday','Wednesday','Thursday','Friday']
+			>>> first_names=['A','A',"b"]
+			>>> another_empty_list=list()
+			>>> another_empty_list
+			[]
+
+			class list([iterable])
+			>>> list('abc')
+			['a', 'b', 'c']
+			>>> list(['aa','bb','cc'])
+			['aa', 'bb', 'cc']
+
+	使用偏移量取得元素
+			>>> list(['aa','bb','cc'])[0]
+			'aa'
+	使用偏移量来改变元素
+			>>> a =list(['aa','bb','cc'])
+			>>> a[0]='dd'
+			>>> a
+			['dd', 'bb', 'cc']
+	列表切片
+
+			>>> a[1:3]
+			['bb', 'cc']
+			>>> a[::1]
+			['dd', 'bb', 'cc']	step>0,从头到尾
+			>>> a[::-1]
+			['cc', 'bb', 'dd']	step<0,从后到前
+
+
+	常用的关于列表的方法
+			append() 	在列表末尾添加元素
+				>>> a=['aa','bb','cc']
+				>>> a.append('dd')
+				>>> a
+				['aa', 'bb', 'cc', 'dd']
+
+
+			extend() +=	合并连个列表
+				>>> a
+				['aa', 'bb', 'cc', 'dd']
+				>>> b=['ee','ff']
+				>>> a.extend(b)
+				>>> a
+				['aa', 'bb', 'cc', 'dd', 'ee', 'ff']
+
+				>>> a=['aa','bb','cc','dd']
+				>>> b=['ee','ff']
+				>>> a+=b
+				>>> a
+				['aa', 'bb', 'cc', 'dd', 'ee', 'ff']
+
+
+			insert()　在列表任意位置添加元素
+				>>> a=['aa','bb','cc','dd']
+				>>> a.insert(2,'22')  	插在偏移量为２的位置
+				>>> a
+				['aa', 'bb', '22', 'cc', 'dd']
+
+
+			del		关键字	删除任意位置元素
+				>>> a=['aa','bb','cc','dd']
+				>>> del a[1]
+				>>> a
+				['aa', 'cc', 'dd']
+
+
+			remove()  移除特定值的元素　　一次移除一个,从前往后
+				>>> a=['aa','bb','aa','dd']
+				>>> a.remove('aa')
+				>>> a
+				['bb', 'aa', 'dd']
+
+
+			pop()  获取指定位置的元素并从列表中删除它
+					pop()=pop(-1)
+				>>> a=['aa','bb','cc','dd']
+				>>> a.pop()
+				'dd'
+				>>> a
+				['aa', 'bb', 'cc']
+				>>> a.pop(0)
+				'aa'
+				>>> a
+				['bb', 'cc']
+
+
+			index() 查询特定值在列表中的位置（偏移量）
+					只能查到第一个
+				>>> a=['aa','bb','aa','dd']
+				>>> a.index('aa')
+				0
+
+
+			in  关键字　判断给定值是否在给定列表中
+				>>> a=['aa','bb','cc','dd']
+				>>> 'aa' in a
+				True
+
+
+			count()	统计列表中出现给定值的次数
+				>>> a=['aa','bb','aa','dd']
+				>>> a.count('aa')
+				2
+
+
+			sort()	列表方法，会改变原列表内容
+					排序，数字从大到小，字母按字母表
+				>>> num=[2,1,4.0,3]
+				>>> num.sort()
+				>>> num
+				[1, 2, 3, 4.0]
+				>>> num.sort(reverse=True)
+				>>> num
+				[4.0, 3, 2, 1]
+
+				>>> num=['2','1','4.0','3']
+				>>> num
+				['2', '1', '4.0', '3']
+				>>> num.sort()
+				>>> num
+				['1', '2', '3', '4.0']
+				>>> num.sort(reverse=True)
+				>>> num
+				['4.0', '3', '2', '1']
+
+			sorted() 通用函数，返回拍好序的列表，原列表内容不变
+				>>> num=['2','1','4.0','3']
+				>>> s_num=sorted(num)
+				>>> s_num
+				['1', '2', '3', '4.0']
+				>>> num
+				['2', '1', '4.0', '3']
+				>>> s_num=sorted(num,reverse=True)
+				>>> s_num
+				['4.0', '3', '2', '1']
+
+			len()	获取长度
+				len(a)
+
+			= 赋值　　a,b指向同一个对象
+					修改一个另一个也会改变
+				>>> a=[1,2,3]　
+				>>> b=a
+				>>> a[0]=4
+				>>> b
+				[4, 2, 3]
+
+			使用copy(),list(),[:]复制
+					改变a对b,c,d无影响
+				>>> a=[1,2,3]
+				>>> b=a.copy()
+				>>> c=list(a)
+				>>> d=a[:]
+				>>> b
+				[1, 2, 3]
+				>>> c
+				[1, 2, 3]
+				>>> d
+				[1, 2, 3]
+				>>> a[0]=4
+				>>> a
+				[4, 2, 3]
+				>>> b
+				[1, 2, 3]
+				>>> c
+				[1, 2, 3]
+				>>> d
+				[1, 2, 3]
+
+
+元组
+	本质：序列结构，内容不可变，允许出现相同的元素
+
+	创建元组
+			创建空元组
+			>>> empty_tuple=()
+			>>> empty_tuple
+			()
+			包含一个或多个元素
+			>>> a=(1,)
+			>>> a
+			(1,)
+			>>> b=(1,2,3)
+			>>> b
+			(1, 2, 3)
+
+			利用tuple()创建元组
+			>>> a=tuple([1,2,3])
+			>>> a
+			(1, 2, 3)
+
+	元组解包
+			>>> m=(1,2,3)
+			>>> a,b,c=m
+			>>> a
+			1
+			>>> c
+			3
+			>>> b
+			2
+
+
+字典
+	有键和值之分，键不能相同，键必须是不可变类型，通常是字符串
+
+	创建字典
+			创建空的字典			
+			>>> empty_dict={}
+			>>> empty_dict
+			{}
+			
+			使用dict()创建字典
+			>>> lol=[['a','b'],['c','d']]
+			>>> dict(lol)
+			{'a': 'b', 'c': 'd'}
+			>>> lot=[('a','b'),('c','d')]
+			>>> dict(lot)
+			{'a': 'b', 'c': 'd'}
+			>>> tol=(['a','b'],['c','d'])
+			>>> dict(tol)
+			{'a': 'b', 'c': 'd'}
+			>>> los=['ab','cd']
+			>>> dict(los)
+			{'a': 'b', 'c': 'd'}
+			>>> tos=('ab','cd')
+			>>> dict(tos)
+			{'a': 'b', 'c': 'd'}
+
+	常用操作
+
+			使用[key]添加修改字典元素
+
+			>>> aa=dict(['aa','bb'])
+			>>> aa
+			{'a': 'a', 'b': 'b'}
+			>>> aa['a']=1
+			>>> aa['c']='c'
+			>>> aa
+			{'c': 'c', 'a': 1, 'b': 'b'}
+
+			使用update()扩充字典
+				如果待添加的字典和待扩充的字典有相同的键，
+				则新入字典的值会取代原有的值
+			>>> first={'a':1,'b':2}
+			>>> second={'b':'bb','c':3}
+			>>> first.update(second)
+			>>> firts
+			{'c': 3, 'a': 1, 'b': 'bb'}
+
+			使用del删除具有指定键的元素
+				del关键字
+			>>> del first['a']
+			>>> first
+			{'b': 2}
+
+			使用clear()清楚所有元素
+			>>> first={'a':1,'b':2}
+			>>> first.clear()
+			>>> first
+			{}
+
+			使用in判断是否存在
+			>>> 'a' in first
+			True
+
+			使用[key]获取值
+			>>> first['a']
+			1
+
+			使用get()获取值
+				mydict.get('a','b') mydict中有键'a'，
+				则返回a的值，否则返回'b'
+
+			>>> first.get('a','not in first')
+			1
+			>>> first.get('c','not in first')
+			'not in first'
+
+			使用keys()获取所有键
+			>>> first.keys()		返回的是一个迭代形式
+			dict_keys(['b', 'a'])　
+			>>> list(first.keys())	使用list()可以转化为列表
+			['b', 'a']
+
+			使用values()获取所有值
+			>>> first.values()
+			dict_values([2, 1])
+
+			使用items()获取所有键值对
+			>>> first.items()
+			dict_items([('b', 2), ('a', 1)])
+			>>> list(first.items())
+			[('b', 2), ('a', 1)]
+			>>> tuple(first.items())
+			(('b', 2), ('a', 1))
+			>>> dict(first.items())
+			{'b': 2, 'a': 1}
+
+			使用=赋值，使用copy()复制
+				=赋值，改变其中一个，所有关联变量全部改变
+				copy()会产生一个新的字典，改变其中之一，其他不变
+			>>> aa={'a':'a','b':'b'}
+			>>> bb=aa
+			>>> aa['c']='c'
+			>>> bb
+			{'c': 'c', 'b': 'b', 'a': 'a'}
+
+			>>> aa={'a':'a','b':'b'}
+			>>> bb=aa.copy()
+			>>> aa['c']='c'
+			>>> bb
+			{'b': 'b', 'a': 'a'}
+
+集合
+	只有键，没有值，键不能相同，不能改变
+
+	创建集合
+			创建空的集合
+			>>> empty_set=set()
+			>>> empty_set
+			set()
+
+			使用{}创建集合
+			>>> aa={1,2,3,4}
+			>>> aa
+			{1, 2, 3, 4}
+
+	set()用法
+			使用字符串创建集合
+			>>> set('letters')
+			{'e', 's', 'r', 't', 'l'}
+			使用列表创建集合
+			>>> set(['a','b','b','c'])
+			{'c', 'b', 'a'}
+			使用元组创建集合
+			>>> set(('a','b','b','c'))
+			{'c', 'b', 'a'}
+			使用字典创建集合
+			>>> first
+			{'b': 2, 'a': 1}
+			>>> set(first)
+			{'b', 'a'}
+			使用迭代类型创建集合
+			>>> set(first.items())
+			{('a', 1), ('b', 2)}
+
+	常见操作
+
+			使用in测试值是否存在
+			>>> a={1,2}
+			>>> b={2,3}
+			>>> 2 in a
+			True
+
+			＆，intersaction()取交集
+			>>> a&b
+			{2}
+			>>> a.intersection(b)
+			{2}
+
+			|,union()取并集
+			>>> a|b
+			{1, 2, 3}
+			>>> a.union(b)
+			{1, 2, 3}
+
+			-,difference()取差集　
+				在第一个中出现，第二个中不出现
+			>>> a-b
+			{1}
+			>>> a.difference(b)
+			{1}
+
+			^，symmetric_difference取异或
+			>>> a^b
+			{1, 3}
+			>>> a.symmetric_difference(b)
+			{1, 3}
+
+			<=,issubset判断是不是子集（含自己）
+			>>> a<b
+			False
+
+			<判断真子集
+			>=,issuperset判断超集
+			>判断真超集
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

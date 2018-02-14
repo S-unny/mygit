@@ -1,0 +1,351 @@
+4.1		使用#号注释，文本字符串中无注释功能
+
+4.2		使用\链接两行代码
+			>>> 1+2+\
+			... 3
+			6
+			>>> 
+
+4.3		if,elif,else
+			if a>1:
+				print(1)
+			else:
+				print(0)
+
+
+			==			相等
+			!=			不等于
+			<			小于
+			<=			小于等于
+			>			大于
+			>=			大于等于
+			in			属于
+			and 		与
+			or			或
+			not			非
+
+			5<x and x<10   等价于	5<x<10
+
+
+		假值
+			布尔			False
+			null类型		None
+			整形			0
+			浮点型		0.0
+			空字符串		''
+			空列表		[]
+			空元组		()
+			空字典		{}
+			空集合		set()
+		剩下的都认为是真值
+
+
+4.4		while用法
+			while count<=5:
+				pirnt(count)
+				count+=1
+
+		使用break跳出循环
+			while True:
+				stuff = input("String to capitalize [type q to quit]: ")
+				if stuff =='q':
+					break
+				print(stuff.capitalieze())
+		使用continue跳到下一次循环
+		使用else进行检测，循环正常结束不执行else
+		`	break跳出循环不执行else
+			
+			conut=0
+			while count<10:
+				count+=1
+				if count % 2=0:
+					continue
+				print(count)
+			else:
+				print("循环正常结束")
+				
+
+4.5		for 用法
+			列表
+			rabbits=['Flopsy','Mopsy','Cottontail','Peter']
+			for rabbit in rabbits:
+			    print(rabbit)
+			字符串
+			word='cat'
+			for letter in word:
+			    print(letter)
+			字典
+			accusation={'room':'ballroom','weapen':'lead pipe',
+			            'person':'Col. Mustard'}
+			for card in accusation:    #与accusation.keys()效果一样，取键
+			    print(card)
+
+			for card in accusation.keys():
+			    print(card)
+
+			for value in accusation.values():
+			    print(value)
+
+
+			for item in accusation.items():
+			    print(item)
+
+			for card,contents in accusation.items(): #分别取键和值
+			    print(card,contents)
+
+			for 中break，continue，else与while相同
+
+
+		zip()并行迭代
+			>>> english=('Monday','Tuseday','Wednesday')
+			>>> french=('Lundi','Mardi','Merredi')
+			>>> zip(english,french)
+			<zip object at 0x7f3bff8d2d88>  #组合在一起的迭代变量
+			>>> dict(zip(english,french))
+			{'Wednesday': 'Merredi', 'Tuseday': 'Mardi', 'Monday': 'Lundi'}
+
+			for a,b in zip(english,french):   #可迭代类型可以这么写
+			    print(a ,'math',b)
+
+		range() 生成自然数列
+			range(start,stop,step) 从start到stop，步长为step，
+			最后一个数字不包含stop
+
+			for x in range(10):
+			    print(x)
+
+			print(list(range(10)))
+
+4.6		推导式
+			[expression for item in iterable]
+			[expression for item in iterable if condition]
+
+			number_list=[number for number in range(0,10)]
+			
+
+			rows=range(1,4)
+			cols=range(1,3)
+			cells=[(row,col) for row in rows for col in cols]
+			for row,col in cells:  #元组拆分
+			    print(row,col)
+
+			字典推导式
+			{key_expression : value_expression for expression in iterable}
+
+			word = 'letters'
+			letter_counts = {letter: word.count(letter) for letter in word}
+			print(letter_counts)	#'e'和't'都算了两次
+
+			letter_counts = {letter: word.count(letter) for letter in set(word)}
+			print(letter_counts)	#完美解决问题
+
+			集合推导式
+				类似列表
+				{expression for item in iterable}
+				{expression for item in iterable if condition}
+
+		生成器推导
+			只能运行一次，第二次使用的时候会发现被擦除了
+			>>> number_thing = (number for number in range(1,6))
+			>>> for number in number_thing:
+			...     print(number)
+			... 
+			1
+			2
+			3
+			4
+			5
+			>>> print(list(number_thing))
+			[]				#再次运行，为空
+
+4.7		函数
+			函数定义
+				def fun():
+					return
+
+			函数调用
+				fun()
+
+			位置参数
+				传入参数按照顺序依次复制给函数中对应参数
+				def menu(wine,entree,dessert):
+				    return{'wine': wine,'entree': entree,'dessert': dessert}
+				menu('a','b','c')
+
+			关键字参数
+				menu(wine= 'a',entree = 'b',dessert = 'c')
+
+			制定默认值参数
+				默认值参数在函数被定义的时候就被算出来了，而
+				不是在程序运行时，不要试图将默认值设为可变数据类型
+
+				def menu(wine,entree,dessert='pudding'):
+				    return{'wine': wine,'entree': entree,'dessert': dessert}
+
+				menu('a','b')
+				menu('a','b','c')
+				menu('a',entree='b','c')
+
+				def buggy(arg,result=[]):
+				    result.append(arg)
+				    print(result)
+
+				buggy('a')
+				buggy('b')
+
+				out
+				['a']
+				['a', 'b']  #可见，第二次调用的时候result中已经有'a'了
+
+
+				def buggy(arg):
+				    result=[]
+				    result.append(arg)
+				    print(result)
+
+
+				buggy('a')
+				buggy('b')   #不存在上述问题
+
+			使用*收集位置参数
+				def print_more(a,b,*args): #多余的参数组成元组
+				    print(a)
+				    print(b)
+				    print(args)
+
+
+				print_more('a','b','c','d','e')
+
+				out
+				a
+				b
+				('c', 'd', 'e')
+
+			使用**收集关键字参数
+				def print_k(**args):   #多余的参数组成字典
+				    print(args)
+
+				print_k(a=1,b=2,c=3)
+
+			将函数作为参数
+				def sum_args(func,*args):
+				    print(func(args))
+
+				sum_args(sum,1,2,3,4,5) #sum 非sum(),有括号代表调用，无括号把sum当做一个函数对象
+
+			内部函数
+				def outer(a,b):
+				    def inner(c,d):
+				        return c+d
+				    return inner(a,b)
+
+			闭包
+				闭包是一个可以由另一个函数动态生成的函数
+				并且可以改变和存储函数外创建的变量的值
+
+				def greeting(name):
+				    def inner():
+				        return 'hello %s' %name  #直接使用外部函数的变量，没有通过变量传递
+				    return inner				 #返回函数本身(对象),而不是调用
+				a = greeting('sun')
+				b = greeting('zhao')
+
+				print(a())
+				print(b())
+
+				out
+				hello sun		#记录了曾经的参数
+				hello zhao		#闭包是一个被动态创建的可以记录外部变量的函数
+
+			匿名函数:lambda()函数
+				def edit_story(words,func):
+				    for word in words:
+				        print(func(word))
+				stairs = ['thud','meow','thud','hiss']
+
+				def  enliven(word):					#
+				    return word.capitalize()+'!'	#
+				    								#
+				edit_story(stairs,enliven)			#定义显示函数版本
+
+				edit_story(stairs,lambda word: word.capitalize()+'!')	#匿名函数版本
+
+4.8     生成器
+			生成器函数
+				与普通函数区别，利用yield返回
+
+				def my_range(first=0,last=10,step=1):
+				    number=first
+				    while number<last:
+				        yield number
+				        number +=step			
+4.9 	装饰器
+			本质上是一个函数，以一个函数作为输入并且返回另一个函数
+
+			def document_it(func):
+			    def new_function2(*args,**kwargs):
+			        print('Running function:',func.__name__)
+			        print('Position arguments:',args)
+			        print('Keyword arguments:',kwargs)
+			        result = func(*args,**kwargs)
+			        print('Result:',result)
+			        return result
+			    return new_function2
+
+			def square_it(func):
+			    def new_function1(*args,**kwargs):
+			        print('Running function:',func.__name__)
+			        result = func(*args,**kwargs)
+			        print('result',result)
+			        return result*result
+			    return new_function1
+			        
+
+
+			#利用装饰器					#手动赋值
+			@document_it				#相当于	add_ints2=document_it(add_ints1)
+			@square_it					#相当于 add_ints1=square_it(add_ints)
+			def add_ints(a,b):
+			    return a+b
+
+			add_ints(3,5)				#相当于add_ints2(3,5)
+
+4.10 	命名空间和作用域
+
+			转自http://python.jobbole.com/81367/
+			Namespace（只）是 从名字到对象的一个映射(a mapping from name to objects) 
+			大部分namespace都是按Python中的字典来实现的。
+			有一些常见的namespace：built-in中的集合（ abs() 函数等）、一个模块中的全局变量等。
+
+			Scope是Python程序的一块文本区域(textual region)。
+			在该文本区域中，对namespace是可以直接访问，而不需要通过属性来访问。
+			Scope是定义程序该如何搜索确切地“名字-对象”的名空间的层级关系。
+
+			直接访问：对一个变量名的引用会在所有namespace中查找该变量，而不是通过属性访问。
+			属性访问：所有名字后加 . 的都认为是属性访问。
+
+			在一个Python程序运行中，至少有4个scopes是存在的。
+
+			直接访问一个变量可能在这四个namespace中逐一搜索。
+
+			Local(innermost)
+			包含局部变量。
+			比如一个函数/方法内部。
+
+			Enclosing
+			包含了非局部(non-local)也非全局(non-global)的变量。
+			比如两个嵌套函数，内层函数可能搜索外层函数的namespace，但该namespace对内层函数而言既非局部也非全局。
+
+			Global(next-to-last)
+			当前脚本的最外层。
+			比如当前模块的全局变量。
+
+			Built-in(outtermost)
+			Python __builtin__ 模块。
+			包含了内建的变量/关键字等。 
+			
+			查找方式
+			Local -> Enclosing -> Global -> Built-in
+
+4.11	使用try和except处理错误
+		
