@@ -23,3 +23,6 @@ sudo apt-get update 更新源
 sudo apt-get upgrade 更新软件
 sudo apt-get install <name> 安装软件
 
+E:Could not get lock /var/lib/apt/lists/lock - open (11: Resource temporarily unavailable)
+ps -e | grep apt
+sudo kill PID
