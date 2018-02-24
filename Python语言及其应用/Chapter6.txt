@@ -1,0 +1,233 @@
+对象和类
+
+	本书中，特性是指self.name之类的东西，属性指类似6.8中@property下面的name，方法就是指def 的函数
+	可以使用 .__dict__查看特性
+
+6.2~6.6		类的定义，继承，覆盖父类中的方法，，利用super从使用父类中的方法
+				class Person():
+					def  __init__(self,name):			#对象初始化方法,self指向了正在被创建的对象本身
+						self.name = name				#第一个参数必须是self
+
+				class MDPerson(Person):					#继承
+					def __init__(self,name):			#覆盖父类中的方法
+						self.name = "Doctor "+name 
+
+				class  JDPerson(Person):
+					def __init__(self, name):
+						self.name = name + ",Esquire"
+
+				class EmailPerson(Person):
+					def __init__(self, name,email):		#因为定义了子类的__init__()方法，父类的__init__()不能被响应
+						super().__init__(name)			#因此要主动调用,将name参数传递给父类的初始化函数
+						self.email = email 				#添加一个新的属性
+										
+				person = Person('Fudd')
+				doctor = MDPerson('Fudd')
+				lawyer = JDPerson('Fudd')		
+				bob = EmailPerson('Bob','bob@126.com')
+
+
+				print(person.name)
+				print(doctor.name)
+				print(lawyer.name)
+				print(bob.email)
+				print(bob.name)
+
+				out：
+					Fudd
+					Doctor Fudd
+					Fudd,Esquire
+					bob@126.com
+					Bob
+
+6.8 		使用属性对特性进行访问和设置
+				使用property
+					同时可以用 .hidden_name和两个方法
+					class Duck():
+						def __init__(self,input_name):
+							self.hidden_name = input_name
+						def get_name(self):
+							print('inside the getter')
+							print(self.hidden_name)
+							
+						def set_name(self,input_name):
+							print('inside the setter')
+							self.hidden_name = input_name
+						name = property(get_name,set_name)
+
+					fowl = Duck('howard')
+					fowl.name 					#name 与property 对应
+					fowl.name = 'aa'
+					fowl.name
+
+					out:
+						inside the getter
+						howard
+						inside the setter
+						inside the getter
+						aa
+				使用修饰符decorator，@property指示getter方法,@name.setter指示setter方法
+					可以使用 .hidden_name,但无显示的get_name和set_name
+					class Duck():
+						def __init__(self,input_name):
+							self.hidden_name = input_name
+
+						@property
+						def name(self):
+							print('inside the getter')
+							print(self.hidden_name)
+
+						@name.setter	
+						def name(self,input_name):
+							print('inside the setter')
+							self.hidden_name = input_name
+
+					fowl = Duck('howard')
+					fowl.name
+					fowl.name = 'aa'
+					fowl.name
+
+					out:
+						inside the getter
+						howard
+						inside the setter
+						inside the getter
+						aa
+
+					属性指向一个计算结果
+						class Circle():
+							def __init__(self,radius):
+								self.radius = radius
+							@property
+							def diameters(self):
+								return 2*self.radius
+
+						c = Circle(5);
+						print(c.radius)
+						print(c.diameters)
+						c.radius = 4
+						print(c.diameters)
+
+						out：
+							5
+							10
+							8			#改变c.radius的值可以改变c.diameters的值
+
+						class Circle():
+							def __init__(self,radius):
+								self.radius = radius
+								self.diameters = 2*self.radius
+
+						c = Circle(5);
+						print(c.radius)
+						print(c.diameters)
+						c.radius = 4
+						print(c.diameters)
+
+						out:
+							5
+							10
+							10			#改变c.radius的值并不能改变c.diameters的值
+
+
+
+6.9			使用名称重整保护私有特性，即将hidden_name改名为__name
+				可以使用 ._Duck__name来访问
+				class Duck():
+					def __init__(self,input_name):
+						self.__name = input_name
+
+					@property
+					def name(self):
+						print('inside the getter')
+						print(self.__name)
+
+					@name.setter	
+					def name(self,input_name):
+						print('inside the setter')
+						self.__name = input_name
+
+				fowl = Duck('howard')
+				fowl.name
+				fowl.name = 'aa'
+				fowl.name
+				fowl._Duck__name
+
+				out:
+					inside the getter
+					howard
+					inside the setter
+					inside the getter
+					aa
+					aa
+
+6.10		方法的类型
+				实例方法作用与实例，上面定义的所有方法均为实例方法
+				类方法作用于类，使用@classmethod指定的方法都是类方法，类方法的第一个参数是类本身
+				class A():
+					count = 0
+					def __init__(self):
+						A.count +=1
+						print(A.count)
+					def exclaim(self):
+						print("I'm an A")
+					@classmethod
+					def  kids(cls):
+						print('A has',cls.count,'little objects')
+				a1 = A()
+				a2 = A()
+				print(A.kids())
+
+				out:
+					1
+					2
+					A has 2 little objects
+
+6.12		特殊方法
+				和比较相关的特殊方法
+					方法名						使用
+					__eq__(self,other)		self == other
+					__ne__(self,other)		self != other
+					__lt__(self,other)		self <  other
+					__gt__(self,other)		self >  other
+					__le__(self,other)		self <=	other
+					__ge__(self,other)		self >= other
+
+				和数学相关的特殊方法
+					__add__(self,other)			self+other
+					__sub__(self,other)			self-other
+					__mul__(self,other)			self*other
+					__flooridiv__(self,other)	self//other
+					__truediv__(self,other)		self/other
+					__mod__(self,other)			self%other
+					__pow__(self,other)			self**other
+
+				其他的特殊方法
+					__str__(self)				str(self)  #影响print
+					__repr__(self)				repr(self)
+					__len__(self)				len(self)
+
+6.13 		组合
+				class Bill():
+					def __init__(self,description):
+						self.description = description
+
+				class Tail():
+					def __init__(self,length):
+						self.length = length
+
+				class Duck():
+					def __init__(self,bill,tail):
+						self.bill = bill
+						self.tail = tail
+					def about(self):
+						print('This duck has a',self.bill.description,'bill and a',self.tail.length,'tail')
+
+
+				tail1 = Tail('long')
+				bill1 = Bill('wide orange')
+				duck = Duck(bill1,tail1)			# 将两个实例作为参数，实现has-a的组合效果
+				duck.about()
+
+				out:
+					This duck has a wide orange bill and a long tail
