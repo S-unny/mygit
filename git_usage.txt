@@ -8,7 +8,7 @@ git push -f origin master  强制推送
 git config    --global user.email "you@example.com"
 git config    --global user.name "Your Name"
 查看工作区状态  git status
-查看变化       git diff filename
+查看变化       git diff filename 
 显示提交日志    git log
 回退到上个版本   git reset --hard HEAD^
 回退到前n个版本  git reset --hard HEAD~n
