@@ -1,0 +1,417 @@
+8.1 	文件输入输出
+			fileobj = open(filename,mode)
+			fileobj:open()返回的文件对象
+			filename:文件的字符串名
+			mode：指明文件类型和操作 [rwxa][tb]
+					r:读模式 w：写模式，如果文件不存在则创建，存在则重新写 
+					x:不存在的情况下新建并写文件 a:如果文件存在，则在文件末尾追加写内容
+					t:文本类型(默认)			 b:二进制文件
+
+			使用write()写文本文件
+				数据分块写入文件
+					fout = open('first','wt')
+					size = len(poem)
+					chunk = 100
+					offset = 0
+					while True:
+						if offset > size:
+							break
+						fout.write(poem[offset:offset+chunk])
+						offset +=chunk
+
+					fout.close()
+				将数据从文件读入到内存中
+					一次性读入
+						fin = open('first','rt')
+						poem = fin.read()
+					分段读入1
+						poem = ''
+						fin = open('../../python语言及其应用/first','rt')
+						chunk = 200
+						while True:
+							fragment = fin.read(chunk)			#read()返回读入内容，读取结束返回''
+							if not fragment:
+								break
+							poem +=fragment
+
+						fin.close()
+						print(len(poem))
+						print(poem)
+					分段读入2
+						poem = ''
+						fin = open('../../python语言及其应用/first','rt')
+						while True:
+							line = fin.readline()				#readline()返回一行读入内容，读取结束返回''
+							if not line:
+								break
+							poem +=line
+
+						fin.close()
+						print(len(poem))
+						print(poem)
+					分段读入3  利用迭代器***
+						poem = ''
+						fin = open('../../python语言及其应用/first','rt')
+						for line in fin:					#一次返回一行
+							poem +=line
+
+						fin.close()
+						print(len(poem))
+						print(poem)
+					readlines()
+						poem = ''
+						fin = open('../../python语言及其应用/first','rt')
+						lines = fin.readlines()						#lines 是一个包含若干行的列表
+						fin.close()
+
+						for line in lines:
+							poem +=line
+							print(line,end='')
+
+						print('\n',len(lines),'lines read')
+						print(lines[6])			
+
+					使用with自动关闭文件
+						with open('first','wt') as fout:
+							fout.write(poem)	#结束之后会自动关闭文件
+
+					seek()函数
+						fin.seek(offset,origin)	
+						offset:偏移量	origin: 0 从开头偏移offset个字节  1从当前位置   2从结尾处
+
+						fin.tell() 		给出当前文件指针位置
+
+8.2		结构化的文本文件
+			CSV
+				写入列表
+				import csv
+				aaa = [
+					['a','1'],
+					['b','2'],
+					['c','3'],
+					['d','4'],
+					]
+				with open('bbb','wt') as fout:  #将aaa写入到bbb文件中
+					csvout = csv.writer(fout)
+					csvout.writerows(aaa)
+
+				将文件内容读入(列表)
+					import csv
+					with open('bbb','rt') as fin:
+						cin = csv.reader(fin) 		#将bbb中内容读入到aaa中
+						aaa = [rows for rows in cin]
+
+					print(aaa)
+				将文件内容读入(字典)
+					import csv
+					with open('bbb','rt') as fin:
+						cin = csv.DictReader(fin,fieldnames=['first','last'])
+						aaa = [rows for rows in cin]
+
+					print(aaa)
+				写入
+					import csv
+					aaa = [{'first': 'a', 'last': '1'},
+						 {'first': 'b', 'last': '2'}, 
+						 {'first': 'c', 'last': '3'}, 
+						 {'first': 'd', 'last': '4'}]
+
+					with open('bbb','wt') as fout:
+						cout = csv.DictWriter(fout,['first','last'])
+						cout.writeheader()			#在第一行写入每一列的名字
+						cout.writerows(aaa)			#写入每一行
+
+
+					import csv
+					with open('bbb','rt') as fin:
+						cin = csv.DictReader(fin)   #省略fieldnames参数，直接以第一行的值作为列标签
+						aaa = [rows for rows in cin]
+
+					print(aaa)
+			XML
+				xml.etree.ElementTree
+				xml.dom
+				xml.sax
+			JSON
+				json
+				import json
+				bbb= json.dumps(aaa)		#将aaa编码成json字符串bbb
+				ddd= json.loads(ccc)		#将ccc解析成python数据结构ddd
+			YAML
+				第三方库 yaml
+			配置文件
+				configparser
+				import configparser
+				cfg = configparser.ConfigParser()
+				cfg.read('aaaa.cfg')
+			使用pickle序列化
+				>>>import pickle
+				>>> import datetime
+				>>> now1 = datetime.datetime.utcnow()
+				>>> pickled = pickle.dumps(now1)		#序列化,转化为可供存储为文件的格式
+				>>> now2 = pickle.loads(pickled)		#反序列化
+				>>> now1
+				datetime.datetime(2018, 2, 26, 13, 45, 26, 693613)
+				>>> now2
+				datetime.datetime(2018, 2, 26, 13, 45, 26, 693613)
+
+8.3		结构化二进制文件
+			电子数据表
+				xls   第三方库 xlrd
+
+			层次数据格式
+				HDF5 特点：快速读取海量数据集
+					h5py		PyTables
+8.4  	关系型数据库
+			SQL包括两种主要的类型
+				DDL(数据定义语言)：处理用户，数据库以及表单的创建，删除，约束以及权限等等
+				DML（数据操作语言):处理数据插入，选择，更新和删除
+
+				基本的SQL DDL命令
+				操作						SQL模式										SQL示例
+				创建数据库				CREATE DATABASE dbname						CREATE DATABASE d
+				选择当前数据库				USE dbname									USE d
+				删除数据库以及表单			DROP DATABASE dbname 						DROP DATABASE d
+				创建表单					CREATE TABLE tbname(coldefs)				CREATE TABLE t(id INT,count INT)
+				删除表单 					DORP TABLE tbname 							DORP TABLE t
+				删除表单中所有行 			TRUNCATE TABLE tbname 						TRUNCATE TABLE t
+
+				基本的 DML操作
+				操作 					SQL模式 										SQL示例
+				增加行 					INSERT INTO tbname VALUES(...)				INSERT INTO t VALUES(7,30)
+				选择全部行和全部列 		SELECT * FROM tbname  						SELECT * FROM t
+				选择全部行和部分列 		SELECT cols FROM tbname 					SELECT id,count FROM t
+				选择部分行和部分列 		SELECT cols FROM taname WHERE condition		SELECT id,count FROM t WHERE count > 5 AND 
+																					id = 9
+				修改一列的部分行 			UPDATE tbname SET col = value WHERE			UPDATE t SET count = 3 WHERE count id = 5
+										condition				
+				删除部分行 				DELETE FROM tbname WHRER condition 			DELETE FROM t WHERE count <= 10 OR id = 16
+
+			DB-API 是python中访问了关系型数据库的标准API，主要函数有
+				connect() 			连接数据库
+				cursor()			创建一个cursor对象来管理查询
+				execute()  executemany()	执行一个或多个SQL命令
+				fetchone() fetchmany() fetchall()	得到execute()后的结果
+
+			SQLite 
+				import sqlite3   								#导入sqlite3模块
+				conn = sqlite3.connect('enterprise,db')			#创建数据库
+				curs = conn.cursor()							#创建游标
+				curs.execute('DROP TABLE zoo')					#删除表单
+				curs.execute('''CREATE TABLE zoo  				#创建表单，列名为	__,__,__
+								(critter VARCHAR(20) PRIMARY KEY,
+								count INT,
+								damages FLOAT)''')
+				curs.execute('INSERT INTO zoo VALUES ("duck",5,0.0)') 		#插入数据
+				curs.execute('INSERT INTO zoo VALUES ("bear",2,1000.0)')
+				ins = 'INSERT INTO zoo (critter,count,damages) VALUES (?,?,?)' #更安全的方式出入数据
+				curs.execute(ins,('weasel',1,2000.0))
+
+				curs.execute('SELECT * FROM zoo')				#选择全部表单
+				rows = curs.fetchall()							
+				print(rows)
+
+				curs.execute('SELECT * FROM zoo ORDER BY count') #按照数目升序排序
+				print(curs.fetchall())
+
+				curs.execute('SELECT * FROM zoo ORDER BY count DESC') 	#降序
+				print(curs.fetchall())
+
+				#curs.execute('SELECT * FROM zoo WHRER damages = (SELECT MAX(damages,) FROM zoo)')   不知道哪里错了
+				#curs.fetchall()   
+
+
+
+				curs.close()
+				conn.close()
+			SQLALchemy
+				安装：pip install sqlalchenmy
+				引擎层，表达式语言，ORM
+
+8.5     NoSQL数据存储
+				Redis:一种数据机构服务器,所有数据都是基于内存的(也可以放到磁盘)
+				安装：pip install redis
+				安装redis服务器：apt-get install redis-server
+				打开redis服务器:redis-server
+				字符串
+					具有单一一个值的键被称为字符串
+					>>> import redis  							#导入模块
+					>>> conn = redis.Redis('localhost',6379)	#链接服务器
+					>>> conn.keys('*')							#查看已有数据
+					[b'secret', b'job', b'fever', b'carats']
+					>>> conn.setnx('job','student')				#如果'job'不存在，则添加，否则什么都不做
+					True
+					>>> conn.setnx('job','student')
+					False
+					>>> conn.getset('secret','aa-bb-cc-dd-ee')	#返回旧值，并赋新值
+					b'ni!'
+					>>> conn.get('secret')						#查看'secret'
+					b'aa-bb-cc-dd-ee'
+					>>> conn.getrange('secret',-2,-1)			#取得-2到-1的字符
+					b'ee'
+					>>> conn.setrange('secret',0,'fff')			#替换子串，从开始算偏移量
+					>>> conn.get('secret')
+					b'fffbb-cc-dd-ee'
+					>>> conn.mset({'pie':'cherry','cordial': 'sherry'})	#同事设置多个值
+					True
+					>>> conn.mget(['fever','carats'])			#同事获取多个值
+					[b'101.5', b'24']
+					>>> conn.delete('fever')					#删除
+					1
+					>>> conn.incr('carats')						#+1
+					25
+					>>> conn.incr('carats',10)					#+10
+					35
+					>>> conn.decr('carats',11)					#-11
+					24
+					>>> conn.set('fever',101.5)					#设置值
+					True
+					>>> conn.incrbyfloat('fever')				#+1.0
+					102.5
+					>>> conn.incrbyfloat('fever',0.5) 			#+0.5
+					103.0
+					>>> conn.incrbyfloat('fever',-1)			#+-1.0
+					102.0
+				列表
+					列表仅能包含字符串
+					>>> conn.lpush('zoo','bear')				#在zoo(列表名)左边插入'bear'
+					1
+					>>> conn.lpush('zoo','alligator','duck')	#左插入duck，alligator
+					3
+					>>> conn.lrange('zoo',0,5)					#查看列表0-5索引处的值
+					[b'duck', b'alligator', b'bear']
+					>>> conn.linsert('zoo','before','bear','aa')	#在'bear'前插入'aa'
+					6
+					>>> conn.linsert('zoo','after','bear','cc')		##在'bear'后插入'aa'
+					7
+					>>> conn.lset('zoo',2,'mm') 				#在offset=2处添加'mm'
+					True
+					>>> conn.rpush('zoo','jj')					#右插入'jj'
+					8
+					>>> conn.lindex('zoo',3) 					#查询offset=3处的值，从0开始
+					b'alligator'
+					>>> conn.lrange('zoo',0,-1)					#查看列表中所有值
+					[b'aa', b'hh', b'mm', b'alligator', b'aa', b'bear', b'cc', b'jj']
+					>>> conn.ltrim('zoo',1,-4)					#仅保留1- -4的值
+					True
+					>>> conn.lrange('zoo',0,-1)
+					[b'hh', b'mm', b'alligator', b'aa']
+				hash表
+					类似于字典，但是只能包含字符串
+					>>> conn.hmset('song',{'aa': 1,'bb': 2,'cc': 3})		#创建hash表(song)，设置两个字段的值
+					True
+					>>> conn.hset('song','dd', 4)							#设置一个字段的值
+					1
+					>>> conn.hget('song','dd')								#获取
+					b'4'
+					>>> conn.hmget('song','aa','bb')		`				#获取多个
+					[b'1', b'2']
+					>> conn.hkeys('song')									#获取所有键
+					[b'bb', b'cc', b'aa', b'dd']	
+					>>> conn.hvals('song')									#获取所有值
+					[b'2', b'3', b'1', b'4']
+					>>> conn.hlen('song')									#返回字段总数
+					4
+					>>> conn.hgetall('song')								#返回所有键和值
+					{b'bb': b'2', b'dd': b'4', b'cc': b'3', b'aa': b'1'}
+					>>> conn.hsetnx('song','ee',5)							#如果不存在，则设置字段
+					1
+					>>> conn.hgetall('song')
+					{b'bb': b'2', b'dd': b'4', b'cc': b'3', b'aa': b'1', b'ee': b'5'}
+				集合
+					>>> conn.sadd('zoo1','duck','goat','turkey')  			#创建集合zoo1,并添加三个值
+					3
+					>>> conn.scard('zoo1')									#查看集合中值的数目
+					3
+					>>> conn.smembers('zoo1')								#查看集合中的所有值
+					{b'turkey', b'goat', b'duck'}
+					>>> conn.srem('zoo1','turkey')							#删除值
+					1
+					>>> conn.sadd('zoo2','tiger','wolf','duck')				
+					3
+					>>> conn.sinter('zoo1','zoo2')							#取交集
+					{b'duck'}
+					>>> conn.sinterstore('fowl_zoo','zoo1','zoo2')			#取交集并放到一个新的集合中
+					1	
+					>>> conn.smembers('fowl_zoo')							
+					{b'duck'}
+					>>> conn.sunion('zoo1','zoo2')							#取并集
+					{b'duck', b'wolf', b'tiger', b'goat'} 		
+					>>> conn.sunionstore('zoo3','zoo1','zoo2')				#取并集并放到一个新的集合中
+					4
+					>>> conn.smembers('zoo3')							
+					{b'duck', b'wolf', b'tiger', b'goat'}
+					>>> conn.sdiff('zoo1','zoo2')							#差集，1有2没有
+					{b'goat'}
+					>>> conn.sdiffstore('zoo4','zoo1','zoo2')
+					1
+					>>> conn.smembers('zoo4')
+					{b'goat'}
+				有序集合
+					通过时间戳跟踪用户的登录
+					>>> now = time.time()
+					>>> now
+					1519792836.712306
+					>>> conn.zadd('logins','a',now)					#创建有序集合，并添加
+					1
+					>>> conn.zadd('logins','b',now+(5*60))			#添加
+					1
+					>>> conn.zadd('logins','c',now+(2*60*60))
+					1
+					>>> conn.zadd('logins','d',now+(24*60*60))
+					1
+					>>> conn.zrank('logins','c')					#查看c的登录顺序
+					2
+					>>> conn.zscore('logins','c')					#查看c的登录时间
+					1519800036.712306
+					>>> conn.zrange('logins',0,-1)					#查看人的所有登录顺序
+					[b'a', b'b', b'c', b'd']
+					>>> conn.zrange('logins',0,-1,withscores =True)	#查看所有人的登录顺序和时间
+					[(b'a', 1519792836.712306), (b'b', 1519793136.712306), (b'c', 1519800036.712306), (b'd', 1519879236.712306)]
+				位图(bit)
+					利用位图跟踪用户登录频率
+					>>> days = ['2013-02-05','2013-02-06','2013-02-07']
+					>>> a = 10
+					>>> b = 11
+					>>> c =12
+					>>> conn.setbit(days[0],a,1)		#第一天a登录
+					0
+					>>> conn.setbit(days[0],b,1)
+					0
+					>>> conn.setbit(days[1],a,1)
+					0
+					>>> conn.setbit(days[2],a,1)
+					0
+					>>> conn.setbit(days[2],c,1)
+					0
+					>>> for day in days:
+					... 	conn.bitcount(day)			#几天中登录人数
+					... 
+					2
+					1
+					2
+					>>> conn.getbit(days[1],c)			#c在第二天登录了么？
+					0
+					>>> conn.bitop('and','everyday',*days)
+					2
+					>>> conn.bitcount('everyday')		#每天都登陆的人数
+					1
+					>>> conn.getbit('everyday',a)		#a在每天都登录了么？
+					1
+					>>> 
+					>>> conn.bitop('or','alldays',*days)
+					2
+					>>> conn.bitcount('alldays')
+					3
+				缓存和过期
+					>>> import time
+					>>> key = 'now you see it'
+					>>> conn.set(key,'but not for long')
+					>>> conn.expire(key,25)				#设置生存时间
+					>>> conn.ttl(key)					#剩余生存时间
+					>>> conn.get(key)					
+					b'but not for long'
+					>>> time.sleep(10)
+					>>> conn.get(key)					#无输出，已经过期了
+		其他的NoSQL
+				MongoDB		
