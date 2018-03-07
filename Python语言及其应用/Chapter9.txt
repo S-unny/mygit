@@ -1,0 +1,44 @@
+剖析Web
+	9.1
+
+		标准Web库
+			http和urllib库
+
+			>>> import urllib.request as ur 			#导入		
+			>>> url = 'http://www.baidu.com'			#网址
+			>>> conn = ur.urlopen(url)					#打开
+			>>> print(conn)
+			<http.client.HTTPResponse object at 0x7fed1a1431d0>   #http请求返回的对象
+			>>> data = conn.read() 						#获取网页所有数据
+			>>> print(conn.status)						#http状态码
+			200
+			>>> print(conn.getheader('Content-Type'))	#数据格式和编码方式
+			text/html; charset=utf-8
+			>>> for key,value in conn.getheaders():		#其他的http头
+			... 	print(key,value)
+
+		第三方库requests
+			>>> import requests
+			>>> url = 'http://www.baidu.com'
+			>>> resp = requests.get(url)
+			>>> resp
+			<Response [200]>
+			>>> print(resp.text)
+
+	9.2	web服务器
+			bottle框架
+				pip install bottle
+				http://bottlepy.org/docs/dev/
+			Flask框架
+				pip install flask
+			diango
+
+			非python的Web服务器
+				apache+mod_wsgi模块
+				nginx+uWSGI			https://www.nginx.com/resources/wiki/start/topics/tutorials/install/
+
+	抓取数据
+		Scrapy框架 
+
+		BeautifulSoup模块来解析HTML
+			pip install beautifulsoup4
