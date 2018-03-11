@@ -1,0 +1,186 @@
+系统
+
+10.1文件
+	
+		用open()创建文件
+			>>> fout = open('oops.txt','wt')
+			>>> print('Oops,I create a file.',file = fout)
+			>>> fout.close()
+		用exists()检查文件,目录是否存在
+			>>> os.path.exists('oops.txt')
+			True
+			>>> os.path.exists('./oops.txt')
+			True
+			>>> os.path.exists('.')
+		判断是否是文件，目录，绝对路径
+			>>> os.path.isfile('oops.txt')
+			True
+			>>> os.path.isdir('oops.txt')
+			False
+			>>> os.path.isdir('.')
+			True
+			>>> os.path.isabs('./web')
+			False
+		使用copy()复制文件
+			import shutil
+			shutil.copy('aaa','bbb')		#将aaa复制到bbb
+			shutil.move('aaa','ccc')		#将aaa复制到ccc，并删除aaa
+		用rename()重命名文件
+			os.rename('aaa','bbb')			#将aaa重命名为bbb
+		用chmod()修改权限
+			os.chmod('oops.txt',0o400)
+		用chwon()修改所有者
+			uid = 5
+			gid = 22
+			os.chown('oops.txt',uid,gid)
+		用abspath()获取路径名
+			>>> os.path.abspath('oops.txt')
+			'/home/sun/eclipse-workspace/python语言及其应用/oops.txt'
+		用symlink()创建符号链接
+			>>> os.symlink('oops.txt','jeeps.txt')
+			>>> os.path.islink('jeeps.txt')
+			True
+		用realpath()获取符号的路径名
+			>>> os.path.realpath('jeeps.txt')
+			'/home/sun/eclipse-workspace/python语言及其应用/oops.txt'
+		用remove()删除文件
+			>>> os.remove('oops.txt')
+
+10.2目录
+			>>> os.mkdir('poems')			#创建目录
+			>>> os.path.isdir('poems')
+			True
+			>>> os.rmdir('poems')			#删除目录
+			>>> os.listdir('.')				#列出当前目录的内容
+			>>> os.chdir('web')				#切换目录
+10.3程序和进程
+			>>> os.getpid()					#获取进程号
+			3473
+			>>> os.getcwd()					#获取当前目录
+			'/home/sun/eclipse-workspace/python语言及其应用/web'
+			>>> os.getuid()					#用户id
+			1000
+			>>> os.getgid()					#用户组id
+			1000
+		使用subprocess创建进程
+			>>> import subprocess
+			>>> ret = subprocess.getoutput('date')
+			>>> ret 
+			'2018年 03月 11日 星期日 09:37:22 CST'
+			>>> ret = subprocess.getoutput('date -u')  #使用参数
+			>>> ret
+			'2018年 03月 11日 星期日 01:39:34 UTC'
+			>>> ret = subprocess.getoutput('date -u | wc') #使用管道 
+			>>> ret
+			'      1       6      43'
+			>>> ret = subprocess.getstatusoutput('date')  #获取其他程序的退出状态
+			>>> ret 
+			(0, '2018年 03月 11日 星期日 09:41:57 CST')
+			>>> ret = subprocess.call('date')				#获取退出时的状态
+			2018年 03月 11日 星期日 09:42:59 CST
+			>>> ret
+			0
+		两种方式运行带参数的程序
+			>>> ret = subprocess.call('date -u',shell = True)	#需要shell = True
+			2018年 03月 11日 星期日 01:46:29 UTC
+			>>> ret = subprocess.call(['date','-u'])
+			2018年 03月 11日 星期日 01:46:58 UTC
+
+		使用multiprocessing创建进程
+		使用terminate()终止进程
+
+10.4日期和时间
+		datetime模块
+			date处理年，月，日
+			time处理时，分，秒，微秒
+			datetime处理日期和时间同事出现的情况
+			temddetla处理日期和时间间隔
+
+			>>> from datetime import date 
+			>>> halloween = date(2018,10,31)
+			>>> halloween
+			datetime.date(2018, 10, 31)
+			>>> halloween.day
+			31
+			>>> halloween.month
+			10
+			>>> halloween.year
+			2018
+			>>> halloween.isoformat()
+			'2018-10-31'
+
+			>>> now = date.today()
+			>>> now
+			datetime.date(2018, 3, 11)
+
+			>>> noon = time(12,0,0)
+			>>> noon
+			datetime.time(12, 0)
+			>>> noon.hour
+			12
+			>>> noon.minute
+			0
+			>>> noon.second
+			0
+			>>> noon.microsecond
+
+			>>> from datetime import datetime
+			>>> some_day = datetime(2018,1,1,1,1,1,1)
+			>>> some_day
+			datetime.datetime(2018, 1, 1, 1, 1, 1, 1)
+			>>> some_day.isoformat()
+			'2018-01-01T01:01:01.000001'
+			>>> now = datetime.now()
+			>>> now
+			datetime.datetime(2018, 3, 11, 10, 9, 59, 670842)
+			>>> now.year
+			2018
+			>>> now.hour
+			10
+
+			>>> noon = time(12)
+			>>> this_day=date.today()
+			>>> noon_today = datetime.combine(this_day,noon)  #将time和date结合起来
+			>>> noon_today
+			datetime.datetime(2018, 3, 11, 12, 0)
+
+		time模块
+			>>> import time
+			>>> now  = time.time()		#从1970年开始的秒数
+			>>> now
+			1520734891.1476758
+			>>> time.ctime(now)			#转化为字符串
+			'Sun Mar 11 10:21:31 2018'
+			>>> time.localtime(now)		#当地时区，struct_time对象
+			time.struct_time(tm_year=2018, tm_mon=3, tm_mday=11, tm_hour=10, tm_min=21, tm_sec=31, tm_wday=6, tm_yday=70, tm_isdst=0)
+			>>> time.gmtime(now)		#格林尼治时间
+			time.struct_time(tm_year=2018, tm_mon=3, tm_mday=11, tm_hour=2, tm_min=21, tm_sec=31, tm_wday=6, tm_yday=70, tm_isdst=0)
+			>>> tm = time.localtime(now)
+			>>> time.mktime(tm) 		#转回秒数
+			1520734891.0
+
+			strfime()将struct_time转化为字符串
+			格式化字符串			时间/日期单元			范围
+			%Y 					年					1900...
+			%m 					月 					01-12
+			%B 					月名 				January...
+			%b 					月名缩写 				jan...
+			%d 					日 					01-31
+			%A 					星期 				Sunday
+			%a    				星期缩写 				Sun
+			%H   				时(24小时制) 			01-23
+			%I 					时(12小时制) 			01-12
+			%p 					上午/下午 			AM,PM
+			%M 					分 					00-59
+			%S        			秒 					00-59
+			>>> import time 
+			>>> fmt = "It's %A,%B %d,%Y, local time %I:%M:%S%p"
+			>>> t = time.localtime()
+			>>> time.strftime(fmt,t)
+			"It's Sunday,March 11,2018, local time 10:37:34AM"
+
+			strptime()将字符串转化为struct_time对象
+			>>> fmt = "%Y-%m-%d"
+			>>> time.strptime('2018-3-11',fmt)   #形式严格匹配
+			time.struct_time(tm_year=2018, tm_mon=3, tm_mday=11, tm_hour=0, tm_min=0, tm_sec=0, tm_wday=6, tm_yday=70, tm_isdst=-1)
+
